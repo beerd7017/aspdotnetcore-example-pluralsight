@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DutchTreat.Controllers
 {
@@ -13,6 +14,8 @@ namespace DutchTreat.Controllers
         public IActionResult Contact()
         {
             ViewBag.Title = "Contact Us";
+
+            throw new InvalidOperationException("Bad things happen");
             return View();
         }
 
