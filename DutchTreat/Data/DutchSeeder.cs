@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using DutchTreat.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
