@@ -31,6 +31,7 @@ namespace DutchTreat
             }
 
             app.UseStaticFiles();
+            app.UseNodeModules(env);
 
             app.UseMvc(cfg =>
             {
