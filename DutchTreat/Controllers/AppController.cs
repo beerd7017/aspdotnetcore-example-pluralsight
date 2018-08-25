@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using DutchTreat.Data;
+﻿using DutchTreat.Data;
 using DutchTreat.Services;
 using DutchTreat.ViewModels;
 using Microsoft.AspNetCore.Mvc;
