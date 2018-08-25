@@ -1,6 +1,7 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+using System.Collections.Generic;
 
 namespace DutchTreat.Migrations
 {
@@ -12,10 +13,10 @@ namespace DutchTreat.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    OrderDate = table.Column<DateTime>(nullable: false),
-                    OrderNumber = table.Column<string>(nullable: true)
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,19 +27,19 @@ namespace DutchTreat.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Category = table.Column<string>(nullable: true),
-                    Size = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    ArtDescription = table.Column<string>(nullable: true),
-                    ArtDating = table.Column<string>(nullable: true),
-                    ArtId = table.Column<string>(nullable: true),
-                    Artist = table.Column<string>(nullable: true),
-                    ArtistBirthDate = table.Column<DateTime>(nullable: false),
-                    ArtistDeathDate = table.Column<DateTime>(nullable: false),
-                    ArtistNationality = table.Column<string>(nullable: true)
+                    ArtDating = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ArtDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ArtId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Artist = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ArtistBirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ArtistDeathDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ArtistNationality = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,12 +50,12 @@ namespace DutchTreat.Migrations
                 name: "OrderItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ProductId = table.Column<int>(nullable: true),
-                    Quantity = table.Column<int>(nullable: false),
-                    UnitPrice = table.Column<decimal>(nullable: false),
-                    OrderId = table.Column<int>(nullable: true)
+                    OrderId = table.Column<int>(type: "int", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18, 2)", nullable: false)
                 },
                 constraints: table =>
                 {

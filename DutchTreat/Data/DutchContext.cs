@@ -1,5 +1,4 @@
-﻿using System;
-using DutchTreat.Data.Entities;
+﻿using DutchTreat.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DutchTreat.Data
@@ -13,17 +12,17 @@ namespace DutchTreat.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.Entity<Order>()
-                .HasData(new Order()
-                {
-                    Id = 1,
-                    OrderDate = DateTime.UtcNow,
-                    OrderNumber = "1234"
-                });
+            builder.Entity<Product>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Entity<OrderItem>()
+                .Property(p => p.UnitPrice)
+                .HasColumnType("decimal(18,2)");
         }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DutchTreat.Migrations
 {
     [DbContext(typeof(DutchContext))]
-    [Migration("20180825183113_SeedData")]
-    partial class SeedData
+    [Migration("20180825203641_SeedAgain")]
+    partial class SeedAgain
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,10 +34,6 @@ namespace DutchTreat.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
-
-                    b.HasData(
-                        new { Id = 1, OrderDate = new DateTime(2018, 8, 25, 18, 31, 12, 888, DateTimeKind.Utc), OrderNumber = "1234" }
-                    );
                 });
 
             modelBuilder.Entity("DutchTreat.Data.Entities.OrderItem", b =>
@@ -52,7 +48,8 @@ namespace DutchTreat.Migrations
 
                     b.Property<int>("Quantity");
 
-                    b.Property<decimal>("UnitPrice");
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -85,7 +82,8 @@ namespace DutchTreat.Migrations
 
                     b.Property<string>("Category");
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Size");
 

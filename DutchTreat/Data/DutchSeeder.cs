@@ -24,13 +24,13 @@ namespace DutchTreat.Data
 
             if (!_ctx.Products.Any())
             {
-                //Need to create sample data
+                // Need to create sample data
                 var filepath = Path.Combine(_hosting.ContentRootPath, "Data/art.json");
                 var json = File.ReadAllText(filepath);
                 var products = JsonConvert.DeserializeObject<IEnumerable<Product>>(json);
                 _ctx.Products.AddRange(products);
 
-                var order = _ctx.Orders.Where(o => o.Id == 1).FirstOrDefault();
+                var order = _ctx.Orders.FirstOrDefault(o => o.Id == 1);
                 if (order != null)
                 {
                     order.Items = new List<OrderItem>()
@@ -44,9 +44,8 @@ namespace DutchTreat.Data
                     };
                 }
 
-
-
                 _ctx.SaveChanges();
+
             }
         }
     }
