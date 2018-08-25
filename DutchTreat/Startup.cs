@@ -22,6 +22,7 @@ namespace DutchTreat
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DutchContext>(cfg => { cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString")); });
+            services.AddTransient<DutchSeeder>();
             services.AddTransient<IMailService, NullMailService>();
             //Support for real mail service
             services.AddMvc();
@@ -33,10 +34,6 @@ namespace DutchTreat
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/error");
             }
 
             app.UseStaticFiles();
