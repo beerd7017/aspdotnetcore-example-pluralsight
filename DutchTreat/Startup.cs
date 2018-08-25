@@ -1,4 +1,5 @@
-﻿using DutchTreat.Data;
+﻿using AutoMapper;
+using DutchTreat.Data;
 using DutchTreat.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +27,7 @@ namespace DutchTreat
             services.AddDbContext<DutchContext>(cfg => { cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString")); });
             services.AddTransient<DutchSeeder>();
             services.AddScoped<IDutchRepository, DutchRepository>();
+            services.AddAutoMapper();
             services.AddTransient<IMailService, NullMailService>();
             //Support for real mail service
             services.AddMvc()
