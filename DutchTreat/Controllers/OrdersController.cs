@@ -63,5 +63,25 @@ namespace DutchTreat.Controllers
                 return BadRequest("Failed to get order");
             }
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]Order model)
+        {
+            //add it to the database
+            try
+            {
+                _repository.AddEntity(model);
+                if (_repository.SaveAll())
+                {
+                    return Created($"/api/orders/{model.Id}", model);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to save a new order: {ex}");
+            }
+
+            return BadRequest("Failed to save new order");
+        }
     }
 }
