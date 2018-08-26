@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 namespace DutchTreat.Controllers
 {
     [Route("/api/orders/{orderid}/items")]
+    [ApiController]
+    [Produces("application/json")]
     public class OrderItemsController : ControllerBase
     {
         private readonly IDutchRepository _repository;
@@ -25,29 +27,53 @@ namespace DutchTreat.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(int orderId)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public ActionResult<IEnumerable<OrderItem>> Get(int orderId)
         {
-            var order = _repository.GetOrderById(orderId);
-            if (order != null)
+            try
             {
-                return Ok(_mapper.Map<IEnumerable<OrderItem>, IEnumerable<OrderItemViewModel>>(order.Items));
+                var order = _repository.GetOrderById(orderId);
+                if (order != null)
+                {
+                    return Ok(_mapper.Map<IEnumerable<OrderItem>, IEnumerable<OrderItemViewModel>>(order.Items));
+                }
+                _logger.LogError($"Failed to get order item for order : {orderId}");
+                return BadRequest("Filed to get order item");
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to get order item: {ex}");
+                return BadRequest("Filed to get order item");
+            }
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public IActionResult Get(int orderId, int id)
         {
-            var order = _repository.GetOrderById(orderId);
-            if (order != null)
+            try
             {
-                var item = order.Items.Where(i => i.Id == id).FirstOrDefault();
-                if (item != null)
+                var order = _repository.GetOrderById(orderId);
+                if (order != null)
                 {
-                    return Ok(_mapper.Map<OrderItem, OrderItemViewModel>(item));
+                    var item = order.Items.FirstOrDefault(i => i.Id == id);
+                    if (item != null)
+                    {
+                        return Ok(_mapper.Map<OrderItem, OrderItemViewModel>(item));
+                    }
+                    _logger.LogError($"Failed to get order item: {id}");
+                    return BadRequest("Filed to get order item");
                 }
+                _logger.LogError($"Failed to get order item: {orderId}");
+                return BadRequest("Filed to get order");
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to get order item: {ex}");
+                return BadRequest("Filed to get order item");
+            }
         }
     }
 }

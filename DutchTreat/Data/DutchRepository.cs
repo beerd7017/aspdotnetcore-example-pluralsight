@@ -18,14 +18,20 @@ namespace DutchTreat.Data
             _logger = logger;
         }
 
-        public IEnumerable<Order> GetAllOrders()
+        public IEnumerable<Order> GetAllOrders(bool includeItems)
         {
             try
             {
                 _logger.LogInformation("GetAllOrders was called");
+                if (includeItems)
+                {
+                    return _ctx.Orders
+                        .Include(o => o.Items)
+                        .ThenInclude(i => i.Product).ToList();
+                }
+
                 return _ctx.Orders
-                    .Include(o => o.Items)
-                    .ThenInclude(i => i.Product).ToList();
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -42,8 +48,7 @@ namespace DutchTreat.Data
                 return _ctx.Orders
                     .Include(o => o.Items)
                     .ThenInclude(i => i.Product)
-                    .Where(o => o.Id == id)
-                    .FirstOrDefault();
+                    .FirstOrDefault(o => o.Id == id);
             }
             catch (Exception ex)
             {
