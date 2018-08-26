@@ -1,6 +1,8 @@
 ﻿import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
-import { map } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { map } from 'rxjs/operators';
+import { Product } from "./product";
 
 @Injectable()
 export class DataService {
@@ -9,11 +11,13 @@ export class DataService {
 
     }
 
-    public products = [];
+    public products: Product[] = [];
 
-    public loadProducts() {
+    public loadProducts(): Observable<boolean> {
         return this.http.get("/api/products")
-            .map((result: Response) => this.products = result.json());
-            
+            .map((data: any[]) => {
+                this.products = data;
+                return true;
+            });
     }
 }
