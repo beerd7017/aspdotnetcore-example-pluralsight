@@ -21,6 +21,6 @@ export class ProductList implements OnInit {
     }
 
     addProduct(product: Product) {
-        this.data.addToOrder(product);
+        this.data.AddToOrder(product);
     }
 }

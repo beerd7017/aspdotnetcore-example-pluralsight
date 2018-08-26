@@ -8,5 +8,5 @@ import { DataService } from "../shared/dataService";
     styleUrls: []
 })
 export class Cart {
-    constructor(private data: DataService1) {}
+    constructor(private data: DataService) {}
 }
