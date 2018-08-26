@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using DutchTreat.Data;
 using DutchTreat.Data.Entities;
 using DutchTreat.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -20,12 +22,14 @@ namespace DutchTreat.Controllers
         private readonly IDutchRepository _repository;
         private readonly ILogger<OrdersController> _logger;
         private readonly IMapper _mapper;
+        private readonly UserManager<StoreUser> _userManager;
 
-        public OrdersController(IDutchRepository repository, ILogger<OrdersController> logger, IMapper mapper)
+        public OrdersController(IDutchRepository repository, ILogger<OrdersController> logger, IMapper mapper, UserManager<StoreUser> userManager)
         {
             _repository = repository;
             _logger = logger;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -72,7 +76,7 @@ namespace DutchTreat.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]OrderViewModel model)
+        public async Task<IActionResult> Post([FromBody]OrderViewModel model)
         {
             //add it to the database
             try
@@ -85,6 +89,9 @@ namespace DutchTreat.Controllers
                     {
                         newOrder.OrderDate = DateTime.Now;
                     }
+
+                    var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                    newOrder.User = currentUser;
 
                     _repository.AddEntity(newOrder);
                     if (_repository.SaveAll())
