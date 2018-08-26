@@ -1,16 +1,19 @@
-﻿
+﻿import { Injectable } from "@angular/core";
+import { Http, Response } from "@angular/http";
+import { map } from "rxjs/operators";
 
+@Injectable()
 export class DataService {
-    public products = [{
-            title: "First Product",
-            price: 19.99
-        },
-        {
-            title: "Second Product",
-            price: 9.99
-        },
-        {
-            title: "Third Product",
-            price: 14.99
-        }];
+
+    constructor(private http: Http) {
+
+    }
+
+    public products = [];
+
+    public loadProducts() {
+        return this.http.get("/api/products")
+            .map((result: Response) => this.products = result.json());
+            
+    }
 }
