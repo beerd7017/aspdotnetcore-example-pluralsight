@@ -19,4 +19,8 @@ export class ProductList implements OnInit {
         this.data.loadProducts()
             .subscribe(() => this.products = this.data.products);
     }
+
+    addProduct(product: Product) {
+        this.data.addToOrder(product);
+    }
 }
