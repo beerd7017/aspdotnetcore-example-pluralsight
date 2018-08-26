@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\shop\productList.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\index.html" />
   </ItemGroup>
 
@@ -23,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\shop\productList.component.ts" />
     <TypeScriptCompile Include="wwwroot\ts\main.ts" />
     <TypeScriptCompile Include="wwwroot\ts\storecustomer.ts" />
   </ItemGroup>
@@ -31,10 +36,6 @@
     <Content Update="Pages\_ViewStart.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ClientApp\" />
   </ItemGroup>
 
 </Project>
