@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'my-app',
+  selector: 'the-shop',
   template: `
     <div style="text-align:center">
       <h1>
