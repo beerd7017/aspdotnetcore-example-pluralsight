@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { map } from 'rxjs/operators';
 import { Order, OrderItem } from "./order";
@@ -33,6 +33,29 @@ var DataService = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    DataService.prototype.login = function (creds) {
+        var _this = this;
+        return this.http.post("/account/createtoken", creds)
+            .pipe(map(function (response) {
+            var tokenInfo = response;
+            _this.token = tokenInfo.token;
+            _this.tokenExpiration = tokenInfo.expiration;
+            return true;
+        }));
+    };
+    DataService.prototype.checkout = function () {
+        var _this = this;
+        if (!this.order.orderNumber) {
+            this.order.orderNumber = this.order.orderDate.getFullYear().toString() + this.order.orderDate.getTime().toString();
+        }
+        return this.http.post("/api/orders", this.order, {
+            headers: new HttpHeaders({ "Authorization": "Bearer " + this.token })
+        })
+            .pipe(map(function (response) {
+            _this.order = new Order();
+            return true;
+        }));
+    };
     DataService.prototype.AddToOrder = function (product) {
         var item = this.order.items.find(function (i) { return i.productId == product.id; });
         if (item) {

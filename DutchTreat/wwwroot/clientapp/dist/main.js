@@ -168,7 +168,7 @@ module.exports = ".checkout-thumb {\n  max-width: 100px;\n}\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <h3>Confirm Order</h3>\n  <table class=\"table table-bordered table-hover\">\n    <tr *ngFor=\"let o of data.order.items\">\n      <td><img src=\"/img/{{ o.productArtId }}.jpg\" alt=\"o.productTitle\" class=\"img-thumbnail checkout-thumb\" /></td>\n      <td>{{ o.productCategory }}({{ o.productSize }}) - {{ o.productArtist }}: {{ o.productTitle }}</td>\n      <td>{{ o.quantity }}</td>\n      <td>{{ o.unitPrice|currency:'USD':true }}</td>\n      <td>{{ (o.unitPrice * o.quantity)|currency:'USD':true }}</td>\n    </tr>\n  </table>\n  <div class=\"col-md-4 col-md-offset-8 text-right\">\n    <table class=\"table table-condensed\">\n      <tr>\n        <td class=\"text-right\">Subtotal</td>\n        <td class=\"text-right\">{{ data.order.subtotal|currency:'USD':true }}</td>\n      </tr>\n      <tr>\n        <td class=\"text-right\">Shipping</td>\n        <td class=\"text-right\">$ 0.00</td>\n      </tr>\n      <tr>\n        <td class=\"text-right\">Total:</td>\n        <td class=\"text-right\">{{ data.order.subtotal|currency:'USD':true }}</td>\n      </tr>\n    </table>\n    <button class=\"btn btn-success\" (click)=\"onCheckout()\">Complete Purchase</button>\n    <a routerLink=\"/\" class=\"btn btn-info\">Cancel</a>\n  </div>\n\n</div>"
+module.exports = "<div class=\"row\">\r\n    <div *ngIf=\"errorMessage\" class=\"alert alert-warning\">{{ errorMessage }}</div>\r\n    <h3>Confirm Order</h3>\r\n    <table class=\"table table-bordered table-hover\">\r\n        <tr *ngFor=\"let o of data.order.items\">\r\n            <td><img src=\"/img/{{ o.productArtId }}.jpg\" alt=\"o.productTitle\" class=\"img-thumbnail checkout-thumb\" /></td>\r\n            <td>{{ o.productCategory }}({{ o.productSize }}) - {{ o.productArtist }}: {{ o.productTitle }}</td>\r\n            <td>{{ o.quantity }}</td>\r\n            <td>{{ o.unitPrice|currency:'USD':\"symbol\" }}</td>\r\n            <td>{{ (o.unitPrice * o.quantity)|currency:'USD':\"symbol\" }}</td>\r\n        </tr>\r\n    </table>\r\n    <div class=\"col-md-4 col-md-offset-8 text-right\">\r\n        <table class=\"table table-condensed\">\r\n            <tr>\r\n                <td class=\"text-right\">Subtotal</td>\r\n                <td class=\"text-right\">{{ data.order.subtotal|currency:'USD':\"symbol\" }}</td>\r\n            </tr>\r\n            <tr>\r\n                <td class=\"text-right\">Shipping</td>\r\n                <td class=\"text-right\">$ 0.00</td>\r\n            </tr>\r\n            <tr>\r\n                <td class=\"text-right\">Total:</td>\r\n                <td class=\"text-right\">{{ data.order.subtotal|currency:'USD':\"symbol\" }}</td>\r\n            </tr>\r\n        </table>\r\n        <button class=\"btn btn-success\" (click)=\"onCheckout()\">Complete Purchase</button>\r\n        <a routerLink=\"/\" class=\"btn btn-info\">Cancel</a>\r\n    </div>\r\n\r\n</div>"
 
 /***/ }),
 
@@ -201,14 +201,16 @@ var Checkout = /** @class */ (function () {
     function Checkout(data, router) {
         this.data = data;
         this.router = router;
+        this.errorMessage = "";
     }
     Checkout.prototype.onCheckout = function () {
-        if (this.data.loginRequired) {
-            this.router.navigate(["login"]);
-        }
-        else {
-            this.router.navigate(["checkout"]);
-        }
+        var _this = this;
+        this.data.checkout()
+            .subscribe(function (success) {
+            if (success) {
+                _this.router.navigate(["/"]);
+            }
+        }, function (err) { return _this.errorMessage = "Failed to save order"; });
     };
     Checkout = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -232,7 +234,7 @@ var Checkout = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-md-4 col-md-offset-4\">\n    <form (submit)=\"onLogin\" #theForm=\"ngForm\" novalidate>\n      <div class=\"form-group\">\n        <label for=\"username\">Username</label>\n          <input type=\"text\" class=\"form-control\" name=\"username\" [(ngModel)]=\"creds.username\" #username=\"ngModel\" required/>\n          <div class=\"text-danger\" *ngIf=\"username.touched && username.invalid && username.errors.required\">Username is required</div>\n      </div>\n      <div class=\"form-group\">\r\n          <label for=\"password\">Password</label>\r\n          <input type=\"password\" class=\"form-control\" name=\"password\" [(ngModel)]=\"creds.password\" #password=\"ngModel\" required />\r\n          <div class=\"text-danger\" *ngIf=\"password.touched && password.invalid && password.errors.required\">Password is required</div>\r\n      </div>\n      <div class=\"form-group\">\n        <input type=\"submit\" class=\"btn btn-success\" value=\"Login\" [disable]=\"theForm.invalid\" />\n        <a routerLink=\"/\" class=\"btn btn-default\">Cancel</a>\n      </div>\n    </form>\n  </div>\n</div>"
+module.exports = "<div class=\"row\">\r\n    <div class=\"col-md-4 offset-md-4\">\r\n        <div *ngIf=\"errorMessage\" class=\"alert alert-warning\">{{ errorMessage }}</div>\r\n        <form (submit)=\"onLogin()\" #theForm=\"ngForm\" novalidate>\r\n            <div class=\"form-group\">\r\n                <label for=\"username\">Username</label>\r\n                <input type=\"text\" class=\"form-control\" name=\"username\" [(ngModel)]=\"creds.username\" #username=\"ngModel\" required />\r\n                <div class=\"text-danger\" *ngIf=\"username.touched && username.invalid && username.errors.required\" >Username is required!</div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <label for=\"password\">Password</label>\r\n                <input type=\"password\" class=\"form-control\" name=\"password\" [(ngModel)]=\"creds.password\" required #password=\"ngModel\" />\r\n                <div class=\"text-danger\" *ngIf=\"password.touched && password.invalid && password.errors.required\">Password is required!</div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <input type=\"submit\" class=\"btn btn-success\" value=\"Login\" [disabled]=\"theForm.invalid\" />\r\n                <a routerLink=\"/\" class=\"btn btn-default\">Cancel</a>\r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -265,12 +267,26 @@ var Login = /** @class */ (function () {
     function Login(data, router) {
         this.data = data;
         this.router = router;
+        this.errorMessage = "";
         this.creds = {
             username: "",
             password: ""
         };
     }
     Login.prototype.onLogin = function () {
+        var _this = this;
+        this.errorMessage = "";
+        this.data.login(this.creds)
+            .subscribe(function (success) {
+            if (success) {
+                if (_this.data.order.items.length == 0) {
+                    _this.router.navigate([""]);
+                }
+                else {
+                    _this.router.navigate(["checkout"]);
+                }
+            }
+        }, function (err) { return _this.errorMessage = "Failed to login"; });
     };
     Login = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -335,6 +351,29 @@ var DataService = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    DataService.prototype.login = function (creds) {
+        var _this = this;
+        return this.http.post("/account/createtoken", creds)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
+            var tokenInfo = response;
+            _this.token = tokenInfo.token;
+            _this.tokenExpiration = tokenInfo.expiration;
+            return true;
+        }));
+    };
+    DataService.prototype.checkout = function () {
+        var _this = this;
+        if (!this.order.orderNumber) {
+            this.order.orderNumber = this.order.orderDate.getFullYear().toString() + this.order.orderDate.getTime().toString();
+        }
+        return this.http.post("/api/orders", this.order, {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpHeaders"]({ "Authorization": "Bearer " + this.token })
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
+            _this.order = new _order__WEBPACK_IMPORTED_MODULE_3__["Order"]();
+            return true;
+        }));
+    };
     DataService.prototype.AddToOrder = function (product) {
         var item = this.order.items.find(function (i) { return i.productId == product.id; });
         if (item) {
@@ -411,7 +450,7 @@ var OrderItem = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h3>Shopping Cart</h3>\r\n<div>#/Items: {{ data.order.items.length }} </div>\r\n<div>Subtotal: {{ data.order.subtotal | currency:\"USD\":\"symbol\" }}</div>\r\n<table class=\"table table-condensed table-hover\">\r\n    <thead>\r\n    <tr>\r\n        <td>Product</td>\r\n        <td>#</td>\r\n        <td>$</td>\r\n        <td>Total</td>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n        <tr *ngFor=\"let o of data.order.items\">\r\n            <td>{{ o.productCategory }} - {{ o.productTitle }}</td>\r\n            <td>{{ o.quantity }}</td>\r\n            <td>{{ o.unitPrice | currency:\"USD\":\"symbol\" }}</td>\r\n            <td>{{ (o.unitPrice * o.quantity) | currency:\"USD\":\"symbol\" }}</td>\r\n        </tr>\r\n    </tbody>\r\n</table>\r\n<button class=\"btn btn-success\" *ngIf=\"data.order.items.length > 0\" (click)=\"onCheckout()\">Checkout</button>"
+module.exports = "  <h3>Shopping Cart</h3>\r\n<div>#/Items: {{ data.order.items.length }}</div>\r\n<div>Subtotal: {{ data.order.subtotal | currency:\"USD\":\"symbol\" }}</div>\r\n<table class=\"table table-sm table-hover\">\r\n    <thead>\r\n    <tr>\r\n        <td>Product</td>\r\n        <td>#</td>\r\n        <td>$</td>\r\n        <td>Total</td>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    <tr *ngFor=\"let o of data.order.items\">\r\n        <td>{{ o.productCategory }} - {{ o.productTitle }}</td>\r\n        <td>{{ o.quantity }}</td>\r\n        <td>{{ o.unitPrice | currency:\"USD\":\"symbol\" }}</td>\r\n        <td>{{ (o.unitPrice * o.quantity) | currency:\"USD\":\"symbol\" }}</td>\r\n    </tr>\r\n    </tbody>\r\n</table>\r\n<button class=\"btn btn-success\" *ngIf=\"data.order.items.length > 0\" (click)=\"onCheckout()\">Checkout</button>\r\n"
 
 /***/ }),
 
@@ -427,6 +466,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Cart", function() { return Cart; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "../node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _shared_dataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/dataService */ "./app/shared/dataService.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "../node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -438,17 +478,29 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
 var Cart = /** @class */ (function () {
-    function Cart(data) {
+    function Cart(data, router) {
         this.data = data;
+        this.router = router;
     }
+    Cart.prototype.onCheckout = function () {
+        if (this.data.loginRequired) {
+            // Force Login
+            this.router.navigate(["login"]);
+        }
+        else {
+            // Go to checkout
+            this.router.navigate(["checkout"]);
+        }
+    };
     Cart = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: "the-cart",
             template: __webpack_require__(/*! ./cart.component.html */ "./app/shop/cart.component.html"),
             styleUrls: []
         }),
-        __metadata("design:paramtypes", [_shared_dataService__WEBPACK_IMPORTED_MODULE_1__["DataService"]])
+        __metadata("design:paramtypes", [_shared_dataService__WEBPACK_IMPORTED_MODULE_1__["DataService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
     ], Cart);
     return Cart;
 }());
