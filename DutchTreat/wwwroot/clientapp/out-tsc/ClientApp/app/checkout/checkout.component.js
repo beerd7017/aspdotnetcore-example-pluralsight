@@ -9,13 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component } from "@angular/core";
 import { DataService } from '../shared/dataService';
+import { Router } from "@angular/router";
 var Checkout = /** @class */ (function () {
-    function Checkout(data) {
+    function Checkout(data, router) {
         this.data = data;
+        this.router = router;
     }
     Checkout.prototype.onCheckout = function () {
-        // TODO
-        alert("Doing checkout");
+        if (this.data.loginRequired) {
+            this.router.navigate(["login"]);
+        }
+        else {
+            this.router.navigate(["checkout"]);
+        }
     };
     Checkout = __decorate([
         Component({
@@ -23,7 +29,7 @@ var Checkout = /** @class */ (function () {
             templateUrl: "checkout.component.html",
             styleUrls: ['checkout.component.css']
         }),
-        __metadata("design:paramtypes", [DataService])
+        __metadata("design:paramtypes", [DataService, Router])
     ], Checkout);
     return Checkout;
 }());
