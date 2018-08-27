@@ -14,14 +14,16 @@ var Checkout = /** @class */ (function () {
     function Checkout(data, router) {
         this.data = data;
         this.router = router;
+        this.errorMessage = "";
     }
     Checkout.prototype.onCheckout = function () {
-        if (this.data.loginRequired) {
-            this.router.navigate(["login"]);
-        }
-        else {
-            this.router.navigate(["checkout"]);
-        }
+        var _this = this;
+        this.data.checkout()
+            .subscribe(function (success) {
+            if (success) {
+                _this.router.navigate(["/"]);
+            }
+        }, function (err) { return _this.errorMessage = "Failed to save order"; });
     };
     Checkout = __decorate([
         Component({

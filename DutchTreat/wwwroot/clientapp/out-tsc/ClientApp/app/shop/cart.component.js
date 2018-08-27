@@ -9,17 +9,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component } from "@angular/core";
 import { DataService } from "../shared/dataService";
+import { Router } from "@angular/router";
 var Cart = /** @class */ (function () {
-    function Cart(data) {
+    function Cart(data, router) {
         this.data = data;
+        this.router = router;
     }
+    Cart.prototype.onCheckout = function () {
+        if (this.data.loginRequired) {
+            // Force Login
+            this.router.navigate(["login"]);
+        }
+        else {
+            // Go to checkout
+            this.router.navigate(["checkout"]);
+        }
+    };
     Cart = __decorate([
         Component({
             selector: "the-cart",
             templateUrl: "cart.component.html",
             styleUrls: []
         }),
-        __metadata("design:paramtypes", [DataService])
+        __metadata("design:paramtypes", [DataService, Router])
     ], Cart);
     return Cart;
 }());
