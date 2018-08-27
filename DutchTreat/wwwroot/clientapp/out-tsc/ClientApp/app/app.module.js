@@ -6,11 +6,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from "@angular/common/http";
 import { AppComponent } from './app.component';
-import { ProductList } from './shop/productList.component';
-import { Cart } from './shop/cart.component';
-import { DataService } from './shared/dataService';
+import { ProductList } from "./shop/productList.component";
+import { Cart } from "./shop/cart.component";
+import { Shop } from "./shop/shop.component";
+import { Checkout } from "./checkout/checkout.component";
+import { DataService } from "./shared/dataService";
+import { RouterModule } from "@angular/router";
+var routes = [
+    { path: "", component: Shop },
+    { path: "checkout", component: Checkout }
+];
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -19,11 +26,17 @@ var AppModule = /** @class */ (function () {
             declarations: [
                 AppComponent,
                 ProductList,
-                Cart
+                Cart,
+                Shop,
+                Checkout
             ],
             imports: [
                 BrowserModule,
-                HttpModule
+                HttpClientModule,
+                RouterModule.forRoot(routes, {
+                    useHash: true,
+                    enableTracing: false // for Debugging of the Routes
+                })
             ],
             providers: [
                 DataService

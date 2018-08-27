@@ -11,11 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\login\login.component.ts" />
     <None Remove="ClientApp\app\shared\dataService.ts" />
     <None Remove="ClientApp\app\shared\order.ts" />
     <None Remove="ClientApp\app\shared\product.ts" />
     <None Remove="ClientApp\app\shop\cart.component.ts" />
     <None Remove="ClientApp\app\shop\productList.component.ts" />
+    <None Remove="ClientApp\app\shop\shop.component.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,11 +33,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\login\login.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\dataService.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\order.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\product.ts" />
     <TypeScriptCompile Include="ClientApp\app\shop\cart.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\shop\productList.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shop\shop.component.ts" />
     <TypeScriptCompile Include="wwwroot\ts\main.ts" />
     <TypeScriptCompile Include="wwwroot\ts\storecustomer.ts" />
   </ItemGroup>

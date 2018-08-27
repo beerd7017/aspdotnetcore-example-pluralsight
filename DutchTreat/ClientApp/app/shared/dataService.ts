@@ -11,6 +11,9 @@ export class DataService {
     constructor(private http: HttpClient) {
     }
 
+    private token: string = "";
+    private tokenExpiration: Date;
+
     public order: Order = new Order();
 
     public products: Product[] = [];
@@ -24,6 +27,9 @@ export class DataService {
                 }));
     }
 
+    public get loginRequired(): boolean {
+        return this.token.length == 0 || this.tokenExpiration > new Date();
+    }
     public AddToOrder(product: Product) {
 
         let item: OrderItem = this.order.items.find(i => i.productId == product.id);
